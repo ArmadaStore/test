@@ -1,10 +1,12 @@
 package main
 
 import (
+	"context"
 	"fmt"
 	"os"
 
 	"github.com/ArmadaStore/comms/rpc/taskToCargoMgr"
+	"google.golang.org/grpc"
 )
 
 func main() {
@@ -14,7 +16,7 @@ func main() {
 
 	fmt.Println("Cargo Mgr IP: ", cargoMgrIP, "-- Cargo Mgr Port: ", cargoMgrPort)
 
-	requestInfo = taskToCargoMgr.RequesterInfo{
+	requestInfo := taskToCargoMgr.RequesterInfo{
 		lat:       44.985024576832416,
 		lon:       -93.2273939423279,
 		size:      500,
@@ -22,4 +24,29 @@ func main() {
 		appID:     1234,
 	}
 
+	conn, err := grpc.Dial(cargoMgrIP+":"+cargoMgrPort, grpc.WithInsecure())
+	if err != nil {
+		panic("ERROR: gRPC connection error...")
+	}
+
+	fmt.Println("Connection Success with", cargoMgrIP, "and", cargoMgrPort, "\n")
+
+	service := taskToCargoMgr.NewRpcTaskToCargoMgrClient(conn)
+	cargoList, err := service.RequestCargo(context.Background(), &requestInfo)
+	if err != nil {
+		panic("ERROR: Cargo request failed...")
+	}
+
+	cargoIPs := cargoList.GetIPs()
+	cargoPorts := cargoList.GetPorts()
+
+	if len(cargoIPs) != len(cargoPorts) {
+		panic("ERROR: Returned list of Cargo IPs and Ports differ in length")
+	}
+
+	for i := 0; i < len(cargoIPs); i++ {
+		fmt.Println("Cargo ", i+1, " - ", cargoIPs[i], ":", cargoPorts[i])
+	}
+
+	conn.Close()
 }
