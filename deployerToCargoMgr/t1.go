@@ -17,11 +17,11 @@ func main() {
 	fmt.Println("Cargo Mgr IP: ", cargoMgrIP, "-- Cargo Mgr Port: ", cargoMgrPort)
 
 	requestInfo := taskToCargoMgr.RequesterInfo{
-		lat:       44.985024576832416,
-		lon:       -93.2273939423279,
-		size:      500,
-		nReplicas: 2,
-		appID:     1234,
+		Lat:       44.985024576832416,
+		Lon:       -93.2273939423279,
+		Size:      500,
+		NReplicas: 2,
+		AppID:     1234,
 	}
 
 	conn, err := grpc.Dial(cargoMgrIP+":"+cargoMgrPort, grpc.WithInsecure())
