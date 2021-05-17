@@ -20,7 +20,7 @@ func main() {
 		Lat:       37.213189,
 		Lon:       -82.29759,
 		Size:      500,
-		NReplicas: 2,
+		NReplicas: 3,
 		AppID:     "1234",
 	}
 
