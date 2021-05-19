@@ -13,6 +13,7 @@ func main() {
 
 	cargoMgrIP := os.Args[1]
 	cargoMgrPort := os.Args[2]
+	cType := os.Args[3]
 
 	fmt.Println("Cargo Mgr IP: ", cargoMgrIP, "-- Cargo Mgr Port: ", cargoMgrPort)
 
@@ -22,6 +23,7 @@ func main() {
 		Size:      500,
 		NReplicas: 3,
 		AppID:     "1234",
+		CType:     cType,
 	}
 
 	conn, err := grpc.Dial(cargoMgrIP+":"+cargoMgrPort, grpc.WithInsecure())
